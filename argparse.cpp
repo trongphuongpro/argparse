@@ -1,5 +1,4 @@
 #include <iostream>
-#include <locale>
 #include <algorithm>
 #include "argparse.h"
 
