@@ -2,29 +2,36 @@
 #include <map>
 #include <vector>
 
-typedef std::map<std::string, std::string> ArgumentMap;
+typedef std::map<std::string, std::string>& ArgumentMap;
 
 class ArgumentParser {
 public:
 	// Constructor
-	ArgumentParser(int, char**);
+	ArgumentParser(int, char**, std::string = "");
 	
 	// Public methods
-	void add_argument(std::string, std::string = "", std::string = "");
-	std::map<std::string, std::string> parse_args(void);
+	void add_argument(std::string, std::string, std::string, std::string);
+	void add_argument(std::string, std::string);
+	void parse_args(void);
+	const std::string& get(const std::string);
+	template<typename T>
+	T get(const std::string);
+
+	
 
 private:
 	// Private variables
 	int argc;
 	char** argv;
+	std::string description;
 	uint8_t argOrder;
 	int argsNum;
 	std::map<std::string, std::string> argumentMap;
-	std::vector<std::string> keywordArgsInfo;
-	std::vector<std::string> nonKeywordArgsInfo;
+	std::vector<std::string> optionalArgsInfo;
+	std::vector<std::string> positionalArgsInfo;
 	std::string usage;
-	std::vector<std::string> nonKeywordArgs;
-	std::vector<std::vector<std::string>> keywordArgs;
+	std::vector<std::string> positionalArgs;
+	std::vector<std::vector<std::string>> optionalArgs;
 	std::vector<int> unrecognizedArgID;
 
 	// Private methods
@@ -32,9 +39,9 @@ private:
 	void printUsage(void);
 	void checkHelpCommand(void);
 	void checkValidArgs(void);
-	void addInfo(std::string, std::string, std::string);
-	void addNonKeywordArg(std::string);
-	void addKeywordArg(std::string, std::string);
-	void parseNonKeywordArgs();
-	void parseKeywordArgs();
+	void addInfo(std::string, std::string, std::string, std::string);
+	void addPositionalArg(std::string);
+	void addOptionalArg(std::string, std::string, std::string);
+	void parsePositionalArgs();
+	void parseOptionalArgs();
 };
