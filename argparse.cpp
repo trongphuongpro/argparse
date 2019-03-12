@@ -1,5 +1,7 @@
 #include <iostream>
 #include <algorithm>
+#include <exception>
+#include <stdexcept>
 #include "argparse.h"
 
 using namespace std;
@@ -195,17 +197,32 @@ void ArgumentParser::parseOptionalArgs() {
 }
 
 const string& ArgumentParser::get(const string key) {
-	return argumentMap.at(key);
+	try {
+		return argumentMap.at(key);
+	} catch (out_of_range& e) {
+		cout << "Error: invalid key: " << key << e.what() << endl;
+		exit(1);
+	}
 }
 
 template<typename T>
 T ArgumentParser::get(const string key) {
-	// cast to integer
-	if (is_same<T, int>::value)
-		return stoi(argumentMap[key]);
-	// cast to float
-	if (is_same<T, float>::value)
-		return stof(argumentMap[key]);
+	try {
+		// cast to integer
+		if (is_same<T, int>::value)
+			return stoi(argumentMap.at(key));
+		// cast to float
+		if (is_same<T, float>::value)
+			return stof(argumentMap.at(key));
+	} 
+	catch (out_of_range& e) {
+		cout << "Error: invalid key: " << key << endl;
+		exit(1);
+	}
+	catch (invalid_argument& e) {
+		cout << "Error: couldn't convert \"" + argumentMap.at(key) + "\" to integer/float number." << endl;
+		exit(1);
+	}
 }
 
 template int ArgumentParser::get<int>(const string);

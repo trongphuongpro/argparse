@@ -17,7 +17,6 @@ public:
 	template<typename T>
 	T get(const std::string);
 
-	
 
 private:
 	// Private variables
