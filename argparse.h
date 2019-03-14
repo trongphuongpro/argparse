@@ -38,9 +38,10 @@ private:
 	void printUsage(void);
 	void checkHelpCommand(void);
 	void checkValidArgs(void);
-	void addInfo(std::string, std::string, std::string, std::string);
-	void addPositionalArg(std::string);
-	void addOptionalArg(std::string, std::string, std::string);
+	void addInfo(std::string& argName, std::string& helpMsg);
+	void addInfo(std::string&, std::string&, std::string&, std::string&);
+	void addPositionalArg(std::string&);
+	void addOptionalArg(std::string&, std::string&, std::string&);
 	void parsePositionalArgs();
 	void parseOptionalArgs();
 };
