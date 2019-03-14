@@ -9,4 +9,4 @@
 - *void* **add_argument**(string shortOptionalArgument, string longOptionalArgument, string defaultValue, string helpMessage)
 - *void* **parse_args**()
 - *const string&* **get**(const string key)
-- *T* **get**<T>(const string key)
+- *T* **get**&lt;T&gt;(const string key)
