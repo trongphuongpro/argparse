@@ -28,7 +28,7 @@ void ArgumentParser::add_argument(string argName, string helpMsg) {
 
 	if (argName[0] != '-') {
 		addPositionalArg(argName);
-		addInfo(argName, "", "", helpMsg);
+		addInfo(argName, helpMsg);
 	}
 	else {
 		cout << "Error: positional argument [" + argName + "] can't contain -/-- symbol." << endl;
@@ -51,30 +51,29 @@ void ArgumentParser::add_argument(string argName, string accessName, string defa
 }
 
 
-void ArgumentParser::addInfo(string argName, string accessName, string defaultValue, string helpMsg) {
-	// if this is keyword argument
-	if (accessName != "") {
-		optionalArgsInfo.push_back(	' ' + argName + " [" + accessName.substr(2, accessName.size()-2) + "], " +
-									accessName + " [" + accessName.substr(2, accessName.size()-2) + "], " +
-									"default = " + defaultValue +
-									"\n\t\t\t" + "==> " + helpMsg);
+void ArgumentParser::addInfo(string& argName, string& helpMsg) {
+	positionalArgsInfo.push_back(' ' + argName + "\n\t\t\t" + "==> " + helpMsg);
 
-		usage += ' ' + argName + " <" + accessName.substr(2, accessName.size()-2) + "> ";
-	}
-	else {
-		positionalArgsInfo.push_back(' ' + argName + "\n\t\t\t" + "==> " + helpMsg);
+	usage += " <" + argName + "> ";
+}
 
-		usage += " <" + argName + "> ";
-	}
+void ArgumentParser::addInfo(string& argName, string& accessName, string& defaultValue, string& helpMsg) {
+
+	optionalArgsInfo.push_back(	' ' + argName + " [" + accessName.substr(2, accessName.size()-2) + "], " +
+								accessName + " [" + accessName.substr(2, accessName.size()-2) + "], " +
+								"default = " + defaultValue +
+								"\n\t\t\t" + "==> " + helpMsg);
+
+	usage += ' ' + argName + " <" + accessName.substr(2, accessName.size()-2) + "> ";
 }
 
 
-void ArgumentParser::addPositionalArg(string argName) {
+void ArgumentParser::addPositionalArg(string& argName) {
 	positionalArgs.push_back(argName);
 }
 
 
-void ArgumentParser::addOptionalArg(string argName, string accessName, string defaultValue) {
+void ArgumentParser::addOptionalArg(string& argName, string& accessName, string& defaultValue) {
 
 	vector<string> v;
 	v.push_back(argName);
