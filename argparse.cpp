@@ -93,12 +93,7 @@ void ArgumentParser::parse_args() {
 
 
 void ArgumentParser::checkHelpCommand() {
-	// if no argument is given
-	if (argc == 1) {
-		printUsage();
-		exit(0);
-	}
-
+	
 	for (uint8_t i = 1; i < argc; i++) {
 		if (argv[i] == string("-h") || argv[i] == string("--help")) {
 			printUsage();
