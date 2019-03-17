@@ -1,3 +1,6 @@
+#ifndef GUARD_ARGPARSE_H
+#define GUARD_ARGPARSE_H
+
 #include <string>
 #include <map>
 #include <vector>
@@ -45,3 +48,5 @@ private:
 	void parsePositionalArgs();
 	void parseOptionalArgs();
 };
+
+#endif
