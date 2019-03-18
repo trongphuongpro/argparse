@@ -10,15 +10,21 @@ typedef std::map<std::string, std::string>& ArgumentMap;
 class ArgumentParser {
 public:
 	// Constructor
-	ArgumentParser(int, char**, std::string = "");
+	ArgumentParser(int, 
+				   char**, 
+				   const std::string& = "");
 	
 	// Public methods
-	void add_argument(std::string, std::string, std::string, std::string);
-	void add_argument(std::string, std::string);
+	void add_argument(const std::string&, 
+					  const std::string&, 
+					  const std::string&, 
+					  const std::string&);
+	void add_argument(const std::string&, 
+					  const std::string&);
 	void parse_args(void);
-	const std::string& get(const std::string);
+	const std::string& get(const std::string&);
 	template<typename T>
-	T get(const std::string);
+	T get(const std::string&);
 
 
 private:
@@ -41,10 +47,16 @@ private:
 	void printUsage(void);
 	void checkHelpCommand(void);
 	void checkValidArgs(void);
-	void addInfo(std::string& argName, std::string& helpMsg);
-	void addInfo(std::string&, std::string&, std::string&, std::string&);
-	void addPositionalArg(std::string&);
-	void addOptionalArg(std::string&, std::string&, std::string&);
+	void addInfo(const std::string&,
+				 const std::string&);
+	void addInfo(const std::string&, 
+				 const std::string&, 
+				 const std::string&, 
+				 const std::string&);
+	void addPositionalArg(const std::string&);
+	void addOptionalArg(const std::string&, 
+						const std::string&, 
+						const std::string&);
 	void parsePositionalArgs();
 	void parseOptionalArgs();
 };

@@ -6,7 +6,9 @@
 
 using namespace std;
 
-ArgumentParser::ArgumentParser(int _argc, char** _argv, string _description) {
+ArgumentParser::ArgumentParser(int _argc, 
+							   char** _argv, 
+							   const string& _description) {
 	argc = _argc;
 	argv = _argv;
 	description = _description;
@@ -15,8 +17,13 @@ ArgumentParser::ArgumentParser(int _argc, char** _argv, string _description) {
 	argsNum = 0;
 
 	// pre-process usage string, optionalArgsInfo vector and unrecognizedArgID vector
-	usage = "usage: " + string(argv[0]).substr(2, string(argv[0]).size()-2) + " [-h] ";
-	optionalArgsInfo.push_back(" -h/--help\n\t\t\t==> show this help message and exit");
+	usage = "usage: " 
+			+ string(argv[0]).substr(2, string(argv[0]).size()-2) 
+			+ " [-h] ";
+
+	optionalArgsInfo.push_back(" -h/--help"
+							   "\n\t\t\t" 
+							   "==> show this help message and exit");
 
 	for (int i = 1; i < argc; i++)
 		unrecognizedArgID.push_back(i);
@@ -24,24 +31,37 @@ ArgumentParser::ArgumentParser(int _argc, char** _argv, string _description) {
 
 
 // add positional argument
-void ArgumentParser::add_argument(string argName, string helpMsg) {
+void ArgumentParser::add_argument(const string& argName, 
+								  const string& helpMsg) {
 
 	if (argName[0] != '-') {
 		addPositionalArg(argName);
 		addInfo(argName, helpMsg);
 	}
 	else {
-		cout << "Error: positional argument [" + argName + "] can't contain -/-- symbol." << endl;
+		cout << "Error: positional argument [" 
+				+ argName 
+				+ "] can't contain -/-- symbol." 
+			<< endl;
+
 		exit(0);
 	}
 }
 
 
 // add optional argument
-void ArgumentParser::add_argument(string argName, string accessName, string defaultValue, string helpMsg) {
+void ArgumentParser::add_argument(const string& argName, 
+								  const string& accessName, 
+								  const string& defaultValue, 
+								  const string& helpMsg) {
 
 	if (argName[0] != '-' || accessName.substr(0,2) != "--") {
-		cout << "Error: optional argument [" + argName + "/" + accessName + "] must contain -/-- symbol." << endl;
+		cout << "Error: optional argument [" 
+				+ argName + "/" 
+				+ accessName 
+				+ "] must contain -/-- symbol." 
+			<< endl;
+
 		exit(0);
 	}
 	else {
@@ -51,29 +71,45 @@ void ArgumentParser::add_argument(string argName, string accessName, string defa
 }
 
 
-void ArgumentParser::addInfo(string& argName, string& helpMsg) {
-	positionalArgsInfo.push_back(' ' + argName + "\n\t\t\t" + "==> " + helpMsg);
+void ArgumentParser::addInfo(const string& argName, const string& helpMsg) {
+	positionalArgsInfo.push_back(' ' + argName 
+									 + "\n\t\t\t" 
+									 + "==> " + helpMsg);
 
 	usage += " <" + argName + "> ";
 }
 
-void ArgumentParser::addInfo(string& argName, string& accessName, string& defaultValue, string& helpMsg) {
+void ArgumentParser::addInfo(const string& argName, 
+							 const string& accessName, 
+							 const string& defaultValue, 
+							 const string& helpMsg) {
 
-	optionalArgsInfo.push_back(	' ' + argName + " [" + accessName.substr(2, accessName.size()-2) + "], " +
-								accessName + " [" + accessName.substr(2, accessName.size()-2) + "], " +
-								"default = " + defaultValue +
-								"\n\t\t\t" + "==> " + helpMsg);
+	optionalArgsInfo.push_back(	
+					' ' + argName 
+					+ " [" 
+					+ accessName.substr(2, accessName.size()-2) 
+					+ "], " 
+					+ accessName 
+					+ " [" 
+					+ accessName.substr(2, accessName.size()-2) 
+					+ "], " 
+					+ "default = " 
+					+ defaultValue + "\n\t\t\t" + "==> " + helpMsg);
 
-	usage += ' ' + argName + " <" + accessName.substr(2, accessName.size()-2) + "> ";
+	usage += ' ' + argName 
+				 + " <" + accessName.substr(2, accessName.size()-2) 
+				 + "> ";
 }
 
 
-void ArgumentParser::addPositionalArg(string& argName) {
+void ArgumentParser::addPositionalArg(const string& argName) {
 	positionalArgs.push_back(argName);
 }
 
 
-void ArgumentParser::addOptionalArg(string& argName, string& accessName, string& defaultValue) {
+void ArgumentParser::addOptionalArg(const string& argName, 
+									const string& accessName, 
+									const string& defaultValue) {
 
 	vector<string> v;
 	v.push_back(argName);
@@ -141,14 +177,19 @@ void ArgumentParser::parsePositionalArgs() {
 
 		for (argOrder; argOrder < argc; argOrder++) {
 			if ((argv[argOrder-1][0] != '-') && (argv[argOrder][0] != '-')) {
-				remove(unrecognizedArgID.begin(), unrecognizedArgID.end(), argOrder);
+				remove(unrecognizedArgID.begin(), 
+					   unrecognizedArgID.end(), 
+					   argOrder);
 				argumentMap[argName] = argv[argOrder++];
 				break;
 			}
 		}
 
 		if (argumentMap[argName] == "") {
-			cout << "Error: missing argument for [" + argName + "]" << endl;
+			cout << "Error: missing argument for [" 
+					+ argName + "]" 
+				<< endl;
+
 			exit(1);
 		}
 	}
@@ -168,18 +209,30 @@ void ArgumentParser::parseOptionalArgs() {
 				if (i < argc-1) {
 					if (argv[i+1][0] != '-') {
 						argumentMap[key] = argv[i+1];
-						remove(unrecognizedArgID.begin(), unrecognizedArgID.end(), i);
-						remove(unrecognizedArgID.begin(), unrecognizedArgID.end(), i+1);
+						remove(unrecognizedArgID.begin(), 
+							   unrecognizedArgID.end(), 
+							   i);
+						remove(unrecognizedArgID.begin(), 
+							   unrecognizedArgID.end(), 
+							   i+1);
 						argsNum += 2;
 						break;
 					}
 					else {
-						cout << "Error: missing argument for [" + argName + "/" + accessName + "]" << endl;
+						cout << "Error: missing argument for [" 
+								+ argName + "/" 
+								+ accessName + "]" 
+							<< endl;
+
 						exit(1);
 					}
 				}
 				else {
-					cout << "Error: missing argument for [" + argName + "/" + accessName + "]" << endl;
+					cout << "Error: missing argument for [" 
+							+ argName + "/" 
+							+ accessName + "]" 
+						<< endl;
+
 					exit(1);
 				}
 			}
@@ -190,7 +243,7 @@ void ArgumentParser::parseOptionalArgs() {
 	}
 }
 
-const string& ArgumentParser::get(const string key) {
+const string& ArgumentParser::get(const string& key) {
 	try {
 		return argumentMap.at(key);
 	} catch (out_of_range& e) {
@@ -200,7 +253,7 @@ const string& ArgumentParser::get(const string key) {
 }
 
 template<typename T>
-T ArgumentParser::get(const string key) {
+T ArgumentParser::get(const string& key) {
 	try {
 		// cast to integer
 		if (is_same<T, int>::value)
@@ -214,10 +267,14 @@ T ArgumentParser::get(const string key) {
 		exit(1);
 	}
 	catch (invalid_argument& e) {
-		cout << "Error: couldn't convert \"" + argumentMap.at(key) + "\" to integer/float number." << endl;
+		cout << "Error: couldn't convert \"" 
+				+ argumentMap.at(key) 
+				+ "\" to integer/float number." 
+			<< endl;
+			
 		exit(1);
 	}
 }
 
-template int ArgumentParser::get<int>(const string);
-template float ArgumentParser::get<float>(const string);
+template int ArgumentParser::get<int>(const string&);
+template float ArgumentParser::get<float>(const string&);
