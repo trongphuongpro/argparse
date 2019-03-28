@@ -5,7 +5,6 @@
 #include <map>
 #include <vector>
 
-typedef std::map<std::string, std::string>& ArgumentMap;
 
 class ArgumentParser {
 public:

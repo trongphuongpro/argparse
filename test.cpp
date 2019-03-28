@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 	ap.parse_args();
 
 	cout << "image: " << ap.get("image") << endl;
-	cout << "value: " << ap.get<int>("value") << endl;
+	cout << "value: " << ap.get<float>("value") << endl;
 	cout << "program: " << ap.get("program") << endl;
 	cout << "tester: " << ap.get("tester") << endl;
 	
