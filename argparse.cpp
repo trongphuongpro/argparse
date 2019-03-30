@@ -1,7 +1,9 @@
 #include <iostream>
+#include <sstream>
 #include <algorithm>
 #include <exception>
 #include <stdexcept>
+#include <cctype>
 #include "argparse.h"
 
 using namespace std;
@@ -255,12 +257,21 @@ const string& ArgumentParser::get(const string& key) {
 template<typename T>
 T ArgumentParser::get(const string& key) {
 	try {
+		string& value = argumentMap.at(key);
 		// cast to integer
 		if (is_same<T, int>::value)
-			return stoi(argumentMap.at(key));
+			return stoi(value);
 		// cast to float
 		if (is_same<T, float>::value)
-			return stof(argumentMap.at(key));
+			return stof(value);
+		// cast to bool
+		if (is_same<T, bool>::value) {
+			transform(value.begin(), value.end(), value.begin(), ::tolower);
+			istringstream is(value);
+			bool b;
+			is >> boolalpha >> b;
+			return b;
+		}
 	} 
 	catch (out_of_range& e) {
 		cout << "Error: invalid key: " << key << endl;
@@ -278,3 +289,4 @@ T ArgumentParser::get(const string& key) {
 
 template int ArgumentParser::get<int>(const string&);
 template float ArgumentParser::get<float>(const string&);
+template bool ArgumentParser::get<bool>(const string&);
