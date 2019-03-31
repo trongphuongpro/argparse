@@ -177,7 +177,7 @@ void ArgumentParser::parsePositionalArgs() {
 	for (const auto& argName : positionalArgs) {
 		argsNum++;
 
-		for (argOrder; argOrder < argc; argOrder++) {
+		for (; argOrder < argc; argOrder++) {
 			if ((argv[argOrder-1][0] != '-') && (argv[argOrder][0] != '-')) {
 				remove(unrecognizedArgID.begin(), 
 					   unrecognizedArgID.end(), 
@@ -205,8 +205,7 @@ void ArgumentParser::parseOptionalArgs() {
 		string defaultValue = e[2];
 		string key = accessName.substr(2, accessName.size()-2);
 
-		uint8_t i;
-		for (i = 1; i < argc; i+=1) {
+		for (uint8_t i = 1; i < argc; i+=1) {
 			if (argv[i] == argName || argv[i] == accessName) {
 				if (i < argc-1) {
 					if (argv[i+1][0] != '-') {
