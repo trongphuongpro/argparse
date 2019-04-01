@@ -266,6 +266,10 @@ T ArgumentParser::get(const string& key) {
 		// cast to bool
 		if (is_same<T, bool>::value) {
 			transform(value.begin(), value.end(), value.begin(), ::tolower);
+			if (value != "true" && value != "false") {
+				throw domain_error("value should be boolean.");
+			}
+
 			istringstream is(value);
 			bool b;
 			is >> boolalpha >> b;
@@ -280,8 +284,16 @@ T ArgumentParser::get(const string& key) {
 		cout << "Error: couldn't convert \"" 
 				+ argumentMap.at(key) 
 				+ "\" to integer/float number." 
-			<< endl;
+				<< endl;
 			
+		exit(1);
+	}
+	catch (domain_error& e) {
+		cout << "Error: couldn't convert \""
+				+ argumentMap.at(key)
+				+ "\" to boolean value."
+				<< endl;
+
 		exit(1);
 	}
 }
